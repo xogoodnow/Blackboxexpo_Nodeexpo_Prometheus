@@ -18,10 +18,16 @@
 
 
 
-- name:  copy the content of config file to the proper destination
-  copy:
-    src: ./files/prometheus_config.yaml
-    dest: /root/configuration_files/prometheus/
+#- name:  copy the content of config file to the proper destination
+#  copy:
+#    src: ./files/prometheus_config.yaml
+#    dest: /root/configuration_files/prometheus/
+
+- name: create the prometheus config file and place it at the proper location
+  template:
+    dest: /root/configuration_files/prometheus/prometheus_config.yaml
+    src: ./templates/prometheus_config.yaml.j2
+
 
 
 - name: pull the prometheus image

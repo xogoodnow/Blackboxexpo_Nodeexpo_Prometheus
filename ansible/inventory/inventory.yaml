@@ -5,3 +5,18 @@ all:
         simin_1:
           ansible_host:
           ansible_user: ubuntu
+          role: 'monitoring'
+
+
+
+        simin_2:
+          ansible_host:
+          ansible_user:
+          role: 'worker'
+
+
+        simin_3:
+          ansible_host:
+          ansible_user:
+          role: 'worker'
+
