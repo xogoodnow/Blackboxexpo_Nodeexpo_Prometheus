@@ -1,0 +1,48 @@
+---
+
+- name: pull the image for alert manager
+  docker_image:
+    name: prom/alertmanager
+    tag: latest
+    state: present
+
+
+- name: create a directory for alert manager config
+  file:
+    path: {{ item }}
+    state: directory
+    owner: root
+    group: root
+    mode: 0766
+  with_items:
+    - /root/configuration_files/alertmanager
+    - /root/configuration_files/alertmanager_data
+
+
+- name: copy the configuration file to the proper place
+  copy:
+    src: ./files/alertmanager_config.yaml
+    dest: /root/configuration_files/alertmanager/alertmanager_config.yaml
+    mode: 0766
+    owner: root
+    group: root
+
+
+
+- name: run the container for alert manager
+  docker_container:
+    image: prom/alertmanager:latest
+    name: alertmanager
+    volumes:
+      - /root/configuration_files/alertmanager/:/etc/alertmanager/
+      - /root/configuration_files/alertmanager_data:/alertmanager
+    restart_policy: always
+    network_mode: host
+    command:
+      - '--config.file=/etc/alertmanager/alertmanager_config.yaml'
+      - '--storage.path=/alertmanager'
+
+
+
+
+

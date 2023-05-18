@@ -1,0 +1,55 @@
+---
+- name: check if connectivity is not disrupted
+  ping:
+    data: alive
+
+- name: update and upgrade distro
+  apt:
+    update_cache: yes
+    upgrade: dist
+
+
+- name: install some basic packages on the server
+  apt:
+    pkg: {{ item }}
+    state: present
+  with_items:
+    - net-tools
+    - xz-utils
+    - bmon
+    - curl
+    - tcpdump
+    - vim
+    - apt-transport-https
+    - ca-certificates
+    - curl
+    - resolvconf
+    - python3
+    - pyton3-pip
+
+
+- name: set up SNI on the server
+  copy:
+    dest: /etc/resolvconf/resolv.conf.d/head
+    content: |
+      nameserver 1.1.1.1
+      nameserver 8.8.8.8
+
+
+- name: update resolv.conf
+  copy:
+    dest: /etc/resolv.conf
+    content: |
+      nameserver 1.1.1.1
+      nameserver 8.8.8.8
+
+- name: enable resolvconf service so it would be updated on reboot
+  systemd:
+    name: resolvconf
+    state: started
+    enabled: yes
+
+- name: install dockerpy
+  pip:
+    name: docker
+

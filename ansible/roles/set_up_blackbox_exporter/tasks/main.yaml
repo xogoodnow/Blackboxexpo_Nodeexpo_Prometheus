@@ -1,0 +1,43 @@
+---
+
+- name: check if connectivity has been dissrupted or not
+  ping:
+    data: alive
+
+
+- name: pull the image for blackbox exporter
+  docker_image:
+    name: prom/blackbox-exporter
+    tag: latest
+    state: present
+
+- name: create a directory for config files
+  file:
+    path: /root/configuration_files/blackbox
+    state: directory
+    mode: 0766
+    owner: root
+    group: root
+
+
+- name: copy the config file to the appropriate place
+  copy:
+    src: ./files/blackbox.yaml
+    dest: /root/configuration_files/blackbox/blackbox.yaml
+
+
+
+
+- name: run the blackbox
+  docker_container:
+    name: blackbox
+    image: prom/blackbox-exporter:latest
+    volumes: /root/configuration_files/blackbox/blackbox.yaml:/config/blackbox.yml
+    restart_policy: always
+    capabilities: "CAP_NET_RAW"
+    network_mode: host
+    command: --config.file=/config/blackbox.yml
+
+
+
+

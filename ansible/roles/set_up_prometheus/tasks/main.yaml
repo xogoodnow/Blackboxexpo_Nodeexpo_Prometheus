@@ -1,0 +1,52 @@
+---
+
+- name: check if connection is stil up
+  ping:
+    data: alive
+
+
+- name: create the directory for prometheus config
+  file:
+    path: {{ item }}
+    state: directory
+    mode: 0755
+    group: root
+    owner: root
+  with_items:
+    - /root/configuration_files/prometheus
+    - /root/configuration_files/prometheus_data
+
+
+
+- name:  copy the content of config file to the proper destination
+  copy:
+    src: ./files/prometheus_config.yaml
+    dest: /root/configuration_files/prometheus/
+
+
+- name: pull the prometheus image
+  docker_image:
+    name: prom/prometheus
+    tag: latest
+    state: present
+
+
+- name: run the prometheus container
+  docker_container:
+    name: prometheus
+    image: prom/prometheus:latest
+    privileged: true
+    network_mode: host
+    volumes:
+      - /root/configuration_files/prometheus_data:/prometheus
+      - /root/configuration_files/prometheus/:/etc/prometheus/
+    command:
+      - '--config.file=/etc/prometheus/prometheus_config.yaml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+      - '--enable-feature=remote-write-receiver'
+    restart_policy: always
+
+
+
