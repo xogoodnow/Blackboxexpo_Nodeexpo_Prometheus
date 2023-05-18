@@ -1,10 +1,12 @@
 ---
 
-- name: pull the image for alert manager
+- name: pull the image for grafana manager
   docker_image:
     name: grafana/grafana
     tag: latest
     state: present
+    source: pull
+
 
 
 - name: create a directory for alert manager config

@@ -5,6 +5,8 @@
     name: prom/alertmanager
     tag: latest
     state: present
+    source: pull
+
 
 
 - name: create a directory for alert manager config

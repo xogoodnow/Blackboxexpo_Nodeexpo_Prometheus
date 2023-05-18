@@ -29,6 +29,7 @@
     name: prom/prometheus
     tag: latest
     state: present
+    source: pull
 
 
 - name: run the prometheus container

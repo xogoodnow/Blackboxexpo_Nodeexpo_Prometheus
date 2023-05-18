@@ -19,7 +19,7 @@
 
     - name: set up the alert manager
       include_role:
-        name: roles/set_up_alert_manager
+        name: roles/Set_up_alert_manager
 
     - name: set up blackbox
       include_role:
@@ -37,10 +37,7 @@
 
     - name: set up grafana
       include_role:
-        name: roles/set_up_grafana
-
-
-
+        name: roles/Set_up_grafana
 
 
 
