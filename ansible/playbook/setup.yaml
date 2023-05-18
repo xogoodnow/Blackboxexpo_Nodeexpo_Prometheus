@@ -1,0 +1,47 @@
+---
+- name: setting up the exporters and prometheus grafana stack
+  hosts: all
+  become: true
+  tasks:
+    - name: set up the basis on the server
+      include_role:
+        name: roles/pre_set_up
+
+    - name: install docker
+      include_role:
+        name: /roles/install_docker
+
+
+    - name: set up node exporter
+      include_role:
+        name: roles/set_up_node_exporter
+
+
+    - name: set up the alert manager
+      include_role:
+        name: roles/set_up_alert_manager
+
+    - name: set up blackbox
+      include_role:
+        name: roles/set_up_blackbox_exporter
+
+
+    - name: set up node exporter
+      include_role:
+        name: roles/set_up_node_exporter
+
+
+    - name: set up prometheus
+      include_role:
+        name: roles/set_up_prometheus
+
+    - name: set up grafana
+      include_role:
+        name: roles/set_up_grafana
+
+
+
+
+
+
+

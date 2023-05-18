@@ -11,21 +11,20 @@
 
 - name: install some basic packages on the server
   apt:
-    pkg: {{ item }}
+    pkg:
+      - net-tools
+      - xz-utils
+      - bmon
+      - curl
+      - tcpdump
+      - vim
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - resolvconf
+      - python3
+      - pyton3-pip
     state: present
-  with_items:
-    - net-tools
-    - xz-utils
-    - bmon
-    - curl
-    - tcpdump
-    - vim
-    - apt-transport-https
-    - ca-certificates
-    - curl
-    - resolvconf
-    - python3
-    - pyton3-pip
 
 
 - name: set up SNI on the server
@@ -36,7 +35,7 @@
       nameserver 8.8.8.8
 
 
-- name: update resolv.conf
+- name: edit resolv.conf
   copy:
     dest: /etc/resolv.conf
     content: |

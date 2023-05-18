@@ -7,7 +7,7 @@
 
 - name: create the directory for prometheus config
   file:
-    path: {{ item }}
+    path: "{{ item }}"
     state: directory
     mode: 0755
     group: root

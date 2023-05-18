@@ -1,0 +1,31 @@
+---
+
+- name: pull the image for alert manager
+  docker_image:
+    name: grafana/grafana
+    tag: latest
+    state: present
+
+
+- name: create a directory for alert manager config
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0766
+  with_items:
+    - /root/configuration_files/grafana_data
+
+
+- name: run the container for alert manager
+  docker_container:
+    image: grafana/grafana:latest
+    name: grafana
+    volumes:
+      - /root/configuration_files/grafana_data:/var/lib/grafana
+    restart_policy: always
+    network_mode: host
+
+
+
