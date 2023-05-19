@@ -7,6 +7,7 @@
     group: root
     owner: root
     state: directory
+    recurse: yes
 
 
 - name: Extract Node Exporter

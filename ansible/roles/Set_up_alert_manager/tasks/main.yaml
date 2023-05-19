@@ -16,9 +16,11 @@
     owner: root
     group: root
     mode: 0766
+    recurse: yes
   with_items:
     - /root/configuration_files/alertmanager
     - /root/configuration_files/alertmanager_data
+
 
 
 - name: copy the configuration file to the proper place

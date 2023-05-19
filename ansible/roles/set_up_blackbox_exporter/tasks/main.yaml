@@ -20,6 +20,7 @@
     mode: 0766
     owner: root
     group: root
+    recurse: yes
 
 
 - name: copy the config file to the appropriate place

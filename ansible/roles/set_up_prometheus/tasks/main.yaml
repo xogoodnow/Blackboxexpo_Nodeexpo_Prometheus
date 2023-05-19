@@ -12,6 +12,7 @@
     mode: 0755
     group: root
     owner: root
+    recurse: yes
   with_items:
     - /root/configuration_files/prometheus
     - /root/configuration_files/prometheus_data

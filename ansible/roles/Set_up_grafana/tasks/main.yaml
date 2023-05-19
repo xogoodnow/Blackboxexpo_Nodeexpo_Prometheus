@@ -8,7 +8,6 @@
     source: pull
 
 
-
 - name: create a directory for alert manager config
   file:
     path: "{{ item }}"
@@ -16,18 +15,38 @@
     owner: root
     group: root
     mode: 0766
+    recurse: yes
   with_items:
     - /root/configuration_files/grafana_data
 
+- name: create a directory for dashbaords
+  file:
+    path: /root/configuration_files/grafana/dashboards/
+    state: directory
+    mode: 0777
+    owner: root
+    group: root
+    recurse: yes
 
-- name: run the container for alert manager
+- name: copy the node and balckbox exporters to the proper place
+  copy:
+    src: "{{ item }}"
+    dest: /root/configuration_files/grafana/dashboards/
+
+  with_items:
+    - ./files/node-exporter-full_rev31.json
+    - ./file/prometheus-blackbox-exporter_rev3.json
+
+
+- name: run the container for Grafana
   docker_container:
     image: grafana/grafana:latest
     name: grafana
     volumes:
       - /root/configuration_files/grafana_data:/var/lib/grafana
+      - /root/configuration_files/grafana/dashboards/:/etc/grafana/provisioning/dashboards/
     restart_policy: always
     network_mode: host
-
-
-
+    env:
+      - GF_SECURITY_ADMIN_PASSWORD="{{ lookup('password', '/dev/null length=15 chars=ascii_letters,digits') }}"
+      - GF_SECURITY_ADMIN_USER="admin"_ADMIN_USER="pizza"
