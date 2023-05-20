@@ -34,10 +34,12 @@
     - name: set up prometheus
       include_role:
         name: roles/set_up_prometheus
+      when: "role == 'monitoring'"
 
     - name: set up grafana
       include_role:
         name: roles/Set_up_grafana
+      when: "role == 'monitoring'"
 
 
 

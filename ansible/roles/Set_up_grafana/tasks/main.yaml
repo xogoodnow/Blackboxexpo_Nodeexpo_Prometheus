@@ -8,13 +8,13 @@
     source: pull
 
 
-- name: create a directory for alert manager config
+- name: create a directory for alert grafana config
   file:
     path: "{{ item }}"
     state: directory
     owner: root
     group: root
-    mode: 0766
+    mode: 0777
     recurse: yes
   with_items:
     - /root/configuration_files/grafana_data
@@ -34,8 +34,14 @@
     dest: /root/configuration_files/grafana/dashboards/
 
   with_items:
-    - ./files/node-exporter-full_rev31.json
-    - ./file/prometheus-blackbox-exporter_rev3.json
+    - files/node-exporter-full_rev31.json
+    - files/prometheus-blackbox-exporter_rev3.json
+
+- name: set the password for grafana
+  set_fact:
+    password: "{{ lookup('password', '/dev/null length=15 chars=ascii_letters,digits') }}"
+
+
 
 
 - name: run the container for Grafana
@@ -48,5 +54,10 @@
     restart_policy: always
     network_mode: host
     env:
-      - GF_SECURITY_ADMIN_PASSWORD="{{ lookup('password', '/dev/null length=15 chars=ascii_letters,digits') }}"
-      - GF_SECURITY_ADMIN_USER="admin"_ADMIN_USER="pizza"
+      GF_SECURITY_ADMIN_PASSWORD: "{{ password }}"
+      GF_SECURITY_ADMIN_USER: "pizza"
+
+
+- name: show password
+  debug:
+    msg: "{{ password }} is password"

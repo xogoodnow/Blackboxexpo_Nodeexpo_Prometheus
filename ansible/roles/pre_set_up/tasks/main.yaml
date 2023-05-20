@@ -23,7 +23,7 @@
       - curl
       - resolvconf
       - python3
-      - pyton3-pip
+      - python3-pip
     state: present
 
 
